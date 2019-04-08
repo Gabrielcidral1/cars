@@ -1,12 +1,16 @@
 ---
 title: "Cars dataset"
+Author: "Gabriel"
+date: "08/04/2019"
 output:
   rmdformats::readthedown:
+    
     self_contained: false
     thumbnails: true
     lightbox: true
     gallery: true
     highlight: tango
+  #html_document: default
 ---
 
 <img style="float: right;" src="https://media.timtul.com/media/network22/ubiqum.png">
