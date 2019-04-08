@@ -1,19 +1,22 @@
 ---
 title: "Cars dataset"
 output:
-  prettydoc::html_pretty:
-    theme: cayman
-    highlight: github
-
+  rmdformats::readthedown:
+    self_contained: false
+    thumbnails: true
+    lightbox: true
+    gallery: true
+    highlight: tango
 ---
+
+<img style="float: right;" src="https://media.timtul.com/media/network22/ubiqum.png">
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Ubiqum Code Academy
 
-Example of solution
+**Example of solution**
 
 ## Preprocessing
 
@@ -40,7 +43,7 @@ In the initial exploration you can already estimate an outlier
 plot(cars$speed.of.car, cars$distance.of.car)
 ```
 
-## Check for distributions
+#### Check for distributions
 
 ```{r boxplot}
 
@@ -48,7 +51,7 @@ box_plot <- boxplot(cars[, c("distance.of.car","speed.of.car")])
 
 ```
 
-## Exclude outlier
+#### Exclude outlier
 
 ```{r remove outlier}
 
@@ -111,16 +114,17 @@ Pred_dist_intercept <- predict(lm_intercept,test_set)
 test_set <- cbind(test_set, Pred_dist_intercept)
 
 # Model with intercept = 0
-ggplot(cars, aes(x=speed.of.car, y=distance.of.car)) + geom_point() + 
+ggplot(cars, aes(x=speed.of.car, y=distance.of.car)) + geom_point() + xlim(-2, 30) +
 geom_abline(aes(intercept=0, slope=lm_intercept$coefficients[1]), colour='turquoise2')  +  
   labs(title = paste("Model with intercept = 0\n","Adj R2 =" ,signif(summary(lm_intercept)$adj.r.squared, 5),
                      "Intercept = 0 ",
                      " Slope =",signif(lm_intercept$coef[[1]], 5),
-                     " P =",signif(summary(lm_intercept)$coef[1,3], 4)))
+                     " P =",signif(summary(lm_intercept)$coef[1,3], 4))) 
 
 ```
 
-Let's compare both models
+**Let's compare both models**
+
 ```{r Comparison } 
 
 # Comparing both linear regressions
@@ -156,13 +160,15 @@ We can try to log it:
 
 ```{r log model}
 
-lm_log <- lm(distance.of.car ~ log(speed.of.car),train_set)
+lm_log <- lm(log(distance.of.car) ~ speed.of.car,train_set)
 test_set$pred_dist_log <- predict(lm_log,test_set)
 
+test_set$pred_dist_log <- exp(test_set$pred_dist_log)
 
-ggplot(cars, aes(x=log(speed.of.car), y=distance.of.car)) + geom_point() + 
-geom_abline(aes(intercept=lm_log$coefficients[1], slope=lm$coefficients[2]), colour='red')+
-  labs(title = paste("Model with normal intercept\n","Adj R2 = ",signif(summary(lm_log)$adj.r.squared, 5),
+
+ggplot(cars, aes(x=speed.of.car, y=log(distance.of.car))) + geom_point() + 
+geom_abline(aes(intercept=lm_log$coefficients[1], slope=lm_log$coefficients[2]), colour='red')+
+  labs(title = paste("Model with log \n","Adj R2 = ",signif(summary(lm_log)$adj.r.squared, 5),
                      "Intercept =",signif(lm_log$coef[[1]],5 ),
                      " Slope =",signif(lm_log$coef[[2]], 5),
                      " P =",signif(summary(lm_log)$coef[2,4], 5)))
@@ -177,7 +183,7 @@ test_set$pred_dist_sqr <- predict(lm_log,test_set)
 
 ggplot(cars, aes(x=I(speed.of.car^2), y=distance.of.car)) + geom_point() + 
 geom_abline(aes(intercept=lm_sqr$coefficients[1], slope=lm_sqr$coefficients[2]), colour='red')+
-  labs(title = paste("Model with normal intercept\n","Adj R2 = ",signif(summary(lm_sqr)$adj.r.squared, 5),
+  labs(title = paste("Model with squared x\n","Adj R2 = ",signif(summary(lm_sqr)$adj.r.squared, 5),
                      "Intercept =",signif(lm_sqr$coef[[1]],5 ),
                      " Slope =",signif(lm_sqr$coef[[2]], 5),
                      " P =",signif(summary(lm_sqr)$coef[2,4], 5)))
@@ -198,6 +204,5 @@ plot(test_set$speed.of.car, test_set$rel_error_lm, main = "Relative error")
 plot(test_set$speed.of.car, test_set$error_lm, main = "Error")
 
 
-ggplot(data = cars, aes(log(speed.of.car), distance.of.car)) + geom_point()
 ```
 
