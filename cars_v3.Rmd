@@ -1,6 +1,6 @@
 ---
 title: "Cars dataset"
-Author: "Gabriel"
+Author: "Gabriel Ristow Cidral"
 date: "08/04/2019"
 output:
   rmdformats::readthedown:
@@ -30,9 +30,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 pacman::p_load(ggplot2, prettydoc)
 
-cars <- read.csv("C:/Users/gabri/Desktop/Ubiqum/R/Data_Analytics_Predicting_Customer_Preference/Task_1/cars.csv")
-
-#cars <- read.csv("C:/SARA/Ubiqum/CodeAcademy/Section2/Task1/cars.csv")
+cars <- read.csv("cars.csv")
 
 cars$speed.of.car <- as.numeric(cars$speed.of.car)
 cars$distance.of.car <- as.numeric(cars$distance.of.car)
